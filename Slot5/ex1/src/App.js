@@ -1,7 +1,7 @@
 import './App.css';
 import { Exercise1 } from './Components/exercise1';
 import { Exercise2 } from './Components/exercise2';
-import { Exercise3 } from './Components/exercise3';
+
 
 
 function App() {
@@ -9,7 +9,6 @@ function App() {
     <div className="App">
       <Exercise1/>
       <Exercise2/>
-      <Exercise3/>
     </div>
   );
 }

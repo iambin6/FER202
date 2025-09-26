@@ -14,6 +14,8 @@ export function Exercise2() {
         {id: 9, name: 'Chu', age: 21 },
         {id: 10, name: 'Hoa', age: 22 },
     ];
+    const person = people.find (p => p.id === 2);
+
     const isTeen = person => person.age >= 13 && person.age <= 19;
     const teenList = people.filter(isTeen);
     console.log("Danh sach teen: ", teenList);
@@ -45,6 +47,10 @@ export function Exercise2() {
             </ul>
             <p>So luong thanh nien la: {countTeen}</p>
             <p>Tuoi trung binh la: {averageAge}</p>
+            <p>ID: {person.id} -
+               Name: {person.name} -
+               Age: {person.age} 
+            </p>
         </div>
     );
 }
