@@ -1,9 +1,9 @@
 export function Body () {
     const students = [
-        {id: 'HE180001', name: 'Nguyen Van A', address: 'HaNoi', img: '/student1.jpg'},
-        {id: 'HE180002', name: 'Tran Thi B', address: 'Hue', img: '/student2.jpg'},
-        {id: 'HE180003', name: 'Le Van C', address: 'QuangBinh', img: '/student3.jpg'},
-        {id: 'HE180004', name: 'Pham Thi D', address: 'TP.HCM', img: '/student4.jpg'}
+        {id: 'HE180001', name: 'Nguyen Van Chien', address: 'HaNoi', img: '/student1.jpg'},
+        {id: 'HE180002', name: 'Tran Le Thanh', address: 'Hue', img: '/student2.jpg'},
+        {id: 'HE180003', name: 'Hoang Tan Thanh', address: 'QuangBinh', img: '/student3.jpg'},
+        {id: 'HE180004', name: 'Nguyen Thai Duong', address: 'TP.HCM', img: '/student4.jpg'}
     ];
     return (
         <div className ="container my-4">
