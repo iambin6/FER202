@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Card, Row, Col, Badge, Button, Modal, Toast, ToastContainer } from 'react-bootstrap';
+import { Card, Row, Col, Badge, Button, Modal } from 'react-bootstrap';
+import { useNotification } from '../../contexts/NotificationContext';
 import { movies } from '../../data/movies';
 
 function MovieCard({ movie }) {
   const [showModal, setShowModal] = useState(false);
-  const [showToast, setShowToast] = useState(false);
+  const { showSuccess } = useNotification();
 
   // Lấy favourites từ localStorage
   const getFavourites = () => {
@@ -20,7 +21,11 @@ function MovieCard({ movie }) {
     if (!isAlreadyFavourite) {
       favourites.push(movie);
       localStorage.setItem('favourites', JSON.stringify(favourites));
-      setShowToast(true);
+      console.log('Adding to favorites:', movie.title); // Debug log
+      showSuccess(`"${movie.title}" đã được thêm vào danh sách yêu thích!`);
+    } else {
+      console.log('Already in favorites:', movie.title); // Debug log
+      showSuccess(`"${movie.title}" đã có trong danh sách yêu thích!`);
     }
   };
 
@@ -156,24 +161,6 @@ function MovieCard({ movie }) {
           </Button>
         </Modal.Footer>
       </Modal>
-
-      {/* Toast thông báo */}
-      <ToastContainer position="top-end" className="p-3">
-        <Toast 
-          show={showToast} 
-          onClose={() => setShowToast(false)}
-          delay={3000}
-          autohide
-          bg="success"
-        >
-          <Toast.Header>
-            <strong className="me-auto">🎉 Thành công!</strong>
-          </Toast.Header>
-          <Toast.Body className="text-white">
-            <strong>Added to favourites!</strong>
-          </Toast.Body>
-        </Toast>
-      </ToastContainer>
     </>
   );
 }
