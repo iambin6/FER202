@@ -1,35 +1,40 @@
 import React, { useState } from 'react';
-import { Card, Row, Col, Badge, Button, Modal } from 'react-bootstrap';
-import { useNotification } from '../../contexts/NotificationContext';
-import { movies } from '../../data/movies';
+import { Card, Row, Col, Badge, Button, Modal, Toast, ToastContainer } from 'react-bootstrap';
 
 function MovieCard({ movie }) {
   const [showModal, setShowModal] = useState(false);
-  const { showSuccess } = useNotification();
+  const [notifications, setNotifications] = useState([]);
 
-  // Lấy favourites từ localStorage
+  const showSuccess = (message) => {
+    const id = Date.now();
+    const notification = { id, message, type: 'success', timestamp: new Date() };
+    setNotifications(prev => [...prev, notification]);
+    setTimeout(() => {
+      setNotifications(prev => prev.filter(n => n.id !== id));
+    }, 3000);
+  };
+
+  const removeNotification = (id) => {
+    setNotifications(prev => prev.filter(n => n.id !== id));
+  };
+
   const getFavourites = () => {
     const favourites = localStorage.getItem('favourites');
     return favourites ? JSON.parse(favourites) : [];
   };
 
-  // Thêm vào favourites
   const addToFavourites = () => {
     const favourites = getFavourites();
     const isAlreadyFavourite = favourites.some(fav => fav.id === movie.id);
-    
     if (!isAlreadyFavourite) {
       favourites.push(movie);
       localStorage.setItem('favourites', JSON.stringify(favourites));
-      console.log('Adding to favorites:', movie.title); // Debug log
       showSuccess(`"${movie.title}" đã được thêm vào danh sách yêu thích!`);
     } else {
-      console.log('Already in favorites:', movie.title); // Debug log
       showSuccess(`"${movie.title}" đã có trong danh sách yêu thích!`);
     }
   };
 
-  // Rút gọn description
   const truncateDescription = (text, maxLength = 100) => {
     if (text.length <= maxLength) return text;
     return text.substring(0, maxLength) + '...';
@@ -37,13 +42,35 @@ function MovieCard({ movie }) {
 
   return (
     <>
+      <ToastContainer 
+        position="bottom-end" 
+        className="p-3"
+        style={{ position: 'fixed', bottom: '20px', right: '20px', zIndex: 9999 }}
+      >
+        {notifications.map((notification) => (
+          <Toast
+            key={notification.id}
+            show={true}
+            onClose={() => removeNotification(notification.id)}
+            delay={3000}
+            autohide
+            bg="success"
+            style={{ minWidth: '300px' }}
+          >
+            <Toast.Header closeButton>
+              <strong className="me-auto"> Thành công!</strong>
+            </Toast.Header>
+            <Toast.Body className="text-white">
+              <strong>{notification.message}</strong>
+            </Toast.Body>
+          </Toast>
+        ))}
+      </ToastContainer>
+
       <Col xs={12} md={6} lg={4} className="mb-4">
         <Card 
           className="h-100 movie-card shadow-sm"
-          style={{ 
-            transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
-            cursor: 'pointer'
-          }}
+          style={{ transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out', cursor: 'pointer' }}
           onMouseEnter={(e) => {
             e.currentTarget.style.transform = 'translateY(-5px)';
             e.currentTarget.style.boxShadow = '0 8px 25px rgba(0,0,0,0.15)';
@@ -57,12 +84,7 @@ function MovieCard({ movie }) {
             variant="top" 
             src={movie.poster} 
             alt={movie.title}
-            style={{ 
-              height: '300px', 
-              objectFit: 'contain',
-              backgroundColor: '#f8f9fa',
-              padding: '10px'
-            }}
+            style={{ height: '300px', objectFit: 'contain', backgroundColor: '#f8f9fa', padding: '10px' }}
           />
           <Card.Body className="d-flex flex-column">
             <Card.Title className="h5 mb-2">{movie.title}</Card.Title>
@@ -88,7 +110,7 @@ function MovieCard({ movie }) {
                     addToFavourites();
                   }}
                 >
-                  ❤️ Add to Favourites
+                   Add to Favourites
                 </Button>
                 <Button 
                   variant="primary" 
@@ -99,7 +121,7 @@ function MovieCard({ movie }) {
                     setShowModal(true);
                   }}
                 >
-                  📖 Details
+                   Details
                 </Button>
               </div>
             </div>
@@ -107,7 +129,6 @@ function MovieCard({ movie }) {
         </Card>
       </Col>
 
-      {/* Modal chi tiết */}
       <Modal show={showModal} onHide={() => setShowModal(false)} size="lg">
         <Modal.Header closeButton>
           <Modal.Title>{movie.title}</Modal.Title>
@@ -119,13 +140,7 @@ function MovieCard({ movie }) {
                 src={movie.poster} 
                 alt={movie.title}
                 className="img-fluid rounded"
-                style={{ 
-                  width: '100%', 
-                  height: '400px',
-                  objectFit: 'contain',
-                  backgroundColor: '#f8f9fa',
-                  padding: '15px'
-                }}
+                style={{ width: '100%', height: '400px', objectFit: 'contain', backgroundColor: '#f8f9fa', padding: '15px' }}
               />
             </Col>
             <Col md={8}>
@@ -157,7 +172,7 @@ function MovieCard({ movie }) {
             addToFavourites();
             setShowModal(false);
           }}>
-            ❤️ Add to Favourites
+             Add to Favourites
           </Button>
         </Modal.Footer>
       </Modal>

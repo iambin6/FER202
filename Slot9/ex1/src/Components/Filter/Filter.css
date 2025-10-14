@@ -1,0 +1,30 @@
+.filter-card {
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 12px;
+}
+
+.filter-label {
+  font-weight: 600;
+  color: #0d6efd;
+}
+
+.filter-input,
+.filter-select {
+  border-radius: 10px;
+  border-color: rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.filter-input:focus,
+.filter-select:focus {
+  border-color: #86b7fe;
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
+}
+
+@media (max-width: 768px) {
+  .filter-card {
+    border-radius: 10px;
+  }
+}
+
+

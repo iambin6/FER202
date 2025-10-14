@@ -64,5 +64,41 @@ export const movies = [
     country: 'USA',
     duration: 131,
     showtimes: ['11:30', '15:30', '19:00']
+  },
+  {
+    id: 7,
+    title: 'Avatar',
+    description: 'Avatar kể về cựu lính thủy đánh bộ Jake Sully, người được gửi đến hành tinh Pandora để tham gia chương trình "avatar", sử dụng những cơ thể sinh học lai để tương tác với tộc người bản địa Navi, nhằm phục vụ mục đích khai thác khoáng sản quý hiếm. Tuy nhiên, sau khi hòa mình vào văn hóa Navi và yêu nàng chiến binh Neytiri, Jake đã đứng về phía người bản địa để chống lại lực lượng con người, bảo vệ hành tinh và nền văn hóa của họ.',
+    poster: '/picture/avatar1.jpeg',
+    genre: 'Fantasy',
+    year: 2010,
+    country: 'USA',
+    duration: 103,
+    showtimes: ['11:45', '15:15', '19:15']
+  },
+  {
+    id: 8,
+    title: 'Harry Potter and the Prisoner of Azkaban',
+    description: 'Harry Potter và Tên Tù Nhân Ngục Azkaban là phần phim thứ ba trong loạt phim Harry Potter, mô tả năm học thứ ba của Harry tại Hogwarts, nơi cậu phải đối mặt với Sirius Black - một tù nhân nguy hiểm trốn khỏi nhà tù Azkaban - và khám phá sự thật về quá khứ của chính mình. Phim giới thiệu những sinh vật đáng sợ là Giám ngục và giáo sư người sói Remus Lupin, đồng thời hé lộ bí mật về mối liên hệ giữa Sirius Black và cha mẹ Harry, kết thúc bằng việc Harry và Hermione sử dụng Xoay Thời Gian để cứu chú Sirius khỏi bị kết án bằng nụ hôn của Giám ngục. ',
+    poster: '/picture/harry_potter.jpg',
+    genre: 'Fantasy',
+    year: 2004,
+    country: 'UK',
+    duration: 142,
+    showtimes: ['10:45', '14:15', '18:00', '21:45']
+  },
+  {
+    id: 9,
+    title: 'Harry Potter and the Deathly Hallows – Part 1. ',
+    description: 'Harry Potter và Bảo bối Tử thần – Phần 1" là phần đầu tiên của bộ phim điện ảnh cuối cùng trong loạt phim, mô tả nhiệm vụ nguy hiểm của Harry, Ron và Hermione trong việc tìm và phá hủy các Trường Sinh Linh Giá, những mảnh linh hồn giúp Chúa tể Voldemort bất tử. Bộ phim có tông màu u tối hơn, tập trung vào hành trình đầy khó khăn, sự căng thẳng, và thử thách tình bạn của bộ ba khi họ chạy trốn khỏi Voldemort và những Tử thần Thực tử đang kiểm soát thế giới phù thủy. ',
+    poster: '/picture/harry_potter2.jpg',
+    genre: 'Fantasy',
+    year: 2010,
+    country: 'UK',
+    duration: 161,
+    showtimes: ['09:30', '13:00', '16:45', '20:30']
   }
 ];
+
+// Export all unique genres
+export const allGenres = [...new Set(movies.map(movie => movie.genre))];
