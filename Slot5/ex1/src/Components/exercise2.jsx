@@ -14,8 +14,9 @@ export function Exercise2() {
         {id: 9, name: 'Chu', age: 21 },
         {id: 10, name: 'Hoa', age: 22 },
     ];
-    const person = people.find (p => p.id === 2);
-
+    const person = people[1];
+    const personIsTeen = person.age >= 13 && person.age <= 19;
+    const sortByName = [...nameArray].sort((a, b) => a.localeCompare(b));
     const isTeen = person => person.age >= 13 && person.age <= 19;
     const teenList = people.filter(isTeen);
     console.log("Danh sach teen: ", teenList);
@@ -47,10 +48,9 @@ export function Exercise2() {
             </ul>
             <p>So luong thanh nien la: {countTeen}</p>
             <p>Tuoi trung binh la: {averageAge}</p>
-            <p>ID: {person.id} -
-               Name: {person.name} -
-               Age: {person.age} 
-            </p>
+            <p>{person.name} - {person.age} tuoi</p>
+            <p>Result: {personIsTeen ? "Teen" : "Not Teen"}</p>
+            <p>{sortByName.map((name, index) => (<li key={index}>{name}</li>))}</p>
         </div>
     );
 }

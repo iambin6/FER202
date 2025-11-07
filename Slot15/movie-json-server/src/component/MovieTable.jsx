@@ -1,14 +1,16 @@
 // src/component/MovieTable.jsx
 import React from 'react';
-import { Table, Button, Image, Modal, Alert, Spinner, Badge } from 'react-bootstrap';
+import { Table, Button, Image, Modal, Alert, Spinner } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import { useMovieState, useMovieDispatch } from '../contexts/MovieContext';
 
 const MovieTable = () => {
   const state = useMovieState();
+  const navigate = useNavigate();
   // Lấy confirmDelete từ Context (chứa logic xóa phim)
   const { dispatch, confirmDelete } = useMovieDispatch(); 
   
-  const { movies, genres, loading, movieToDelete, showDeleteModal } = state;
+  const { movies, genres, loading, movieToDelete, showDeleteModal, filters } = state;
 
   // Tạo genre map từ dữ liệu API
   const genreMap = genres.reduce((map, genre) => {
@@ -16,18 +18,67 @@ const MovieTable = () => {
     return map;
   }, {});
 
-  // Hàm để lấy màu badge theo danh mục
-  const getCategoryBadgeVariant = (genreName) => {
-    const categoryColors = {
-      'Sci-Fi': 'primary',
-      'Comedy': 'warning',
-      'Drama': 'info', 
-      'Horror': 'dark',
-      'Romance': 'danger',
-      'Action': 'success',
-      'Thriller': 'secondary'
-    };
-    return categoryColors[genreName] || 'secondary';
+  // Hàm filter và sort movies
+  const getFilteredAndSortedMovies = () => {
+    let filtered = [...movies];
+
+    // Filter by search text
+    if (filters.searchText) {
+      filtered = filtered.filter(movie =>
+        movie.title.toLowerCase().includes(filters.searchText.toLowerCase()) ||
+        movie.description.toLowerCase().includes(filters.searchText.toLowerCase())
+      );
+    }
+
+    // Filter by genre
+    if (filters.genreId) {
+      filtered = filtered.filter(movie =>
+        movie.genreId === parseInt(filters.genreId)
+      );
+    }
+
+    // Filter by year
+    if (filters.year) {
+      filtered = filtered.filter(movie =>
+        movie.year === parseInt(filters.year)
+      );
+    }
+
+    // Sort
+    filtered.sort((a, b) => {
+      switch (filters.sortBy) {
+        case 'title':
+          return a.title.localeCompare(b.title);
+        case 'year':
+          return b.year - a.year;
+        case 'duration':
+          return b.duration - a.duration;
+        case 'id':
+        default:
+          return a.id - b.id;
+      }
+    });
+
+    return filtered;
+  };
+
+  const filteredMovies = getFilteredAndSortedMovies();
+
+  const handleViewClick = (movieId) => {
+    // Đảm bảo ID tồn tại và hợp lệ
+    if (movieId === undefined || movieId === null || movieId === '') {
+      console.error('❌ Invalid movie ID:', movieId, 'Type:', typeof movieId);
+      alert(`Lỗi: Phim không có ID hợp lệ! ID: ${movieId}`);
+      
+      // Debug: Log tất cả movies để xem ID
+      console.log('📋 All movies in state:', movies.map(m => ({ id: m.id, title: m.title, idType: typeof m.id })));
+      return;
+    }
+    
+    // Convert sang string để navigate (React Router sẽ handle)
+    const idToNavigate = movieId.toString();
+    console.log('🔍 View clicked - Movie ID:', movieId, 'Type:', typeof movieId, 'Navigating to:', idToNavigate);
+    navigate(`/movies/${idToNavigate}`);
   };
 
   const handleEditClick = (movie) => {
@@ -61,33 +112,47 @@ const MovieTable = () => {
             </tr>
           </thead>
           <tbody>
-            {movies.map((movie, index) => {
-              const genreName = genreMap[movie.genreId] || 'Unknown';
-              return (
-                <tr key={movie.id}>
-                  <td><Image src={movie.poster || movie.avatar} alt={movie.title} style={{ width: '50px', height: '50px', objectFit: 'cover' }} rounded /></td>
-                  <td>#{movie.id}</td>
-                  <td>
-                    <strong>{movie.title}</strong>
-                    <br />
-                    <small className="text-muted">({movie.year})</small>
-                  </td>
-                  <td>
-                    
+            {filteredMovies.length === 0 ? (
+              <tr>
+                <td colSpan="6" className="text-center text-muted py-4">
+                  <h5>Không tìm thấy phim nào</h5>
+                  <p>Thử thay đổi bộ lọc hoặc reset để xem tất cả</p>
+                </td>
+              </tr>
+            ) : (
+              filteredMovies.map((movie, index) => {
+                const genreName = genreMap[movie.genreId] || 'Unknown';
+                return (
+                  <tr key={movie.id}>
+                    <td><Image src={movie.poster || movie.avatar} alt={movie.title} style={{ width: '50px', height: '50px', objectFit: 'cover' }} rounded /></td>
+                    <td>#{movie.id}</td>
+                    <td>
+                      <strong>{movie.title}</strong>
+                      <br />
+                      <small className="text-muted">({movie.year})</small>
+                    </td>
+                    <td>
                       {genreName}
-                    
-                  </td>
-                  <td>{movie.duration} phút</td>
-                 
-                  <td>
-                    <Button variant="primary" size="sm" onClick={() => handleEditClick(movie)} className="me-2">Sửa</Button>
-                    <Button variant="danger" size="sm" onClick={() => handleDeleteClick(movie)}>Xóa</Button>
-                  </td>
-                </tr>
-              );
-            })}
+                    </td>
+                    <td>{movie.duration} phút</td>
+                   
+                    <td>
+                      <Button variant="warning" size="sm" onClick={() => handleViewClick(movie.id)} className="me-2">View</Button>
+                      <Button variant="primary" size="sm" onClick={() => handleEditClick(movie)} className="me-2">Sửa</Button>
+                      <Button variant="danger" size="sm" onClick={() => handleDeleteClick(movie)}>Xóa</Button>
+                    </td>
+                  </tr>
+                );
+              })
+            )}
           </tbody>
         </Table>
+      )}
+
+      {!loading && movies.length > 0 && (
+        <div className="text-end text-muted mt-2">
+          Hiển thị <strong>{filteredMovies.length}</strong> / {movies.length} phim
+        </div>
       )}
 
       {/* MODAL XÁC NHẬN XÓA */}

@@ -7,7 +7,14 @@ export const initialMovieState = {
   currentMovie: { poster: '', title: '', description: '', genreId: '', duration: '', year: '', country: '' },
   showEditModal: false,   
   showDeleteModal: false, 
-  movieToDelete: null     
+  movieToDelete: null,
+  // Filter state
+  filters: {
+    searchText: '',
+    genreId: '',
+    year: '',
+    sortBy: 'id'
+  }
 };
 
 export const movieReducer = (state, action) => {
@@ -65,6 +72,21 @@ export const movieReducer = (state, action) => {
         currentMovie: initialMovieState.currentMovie, 
         isEditing: null,
         showEditModal: false,
+      };
+
+    case 'UPDATE_FILTER':
+      return {
+        ...state,
+        filters: {
+          ...state.filters,
+          [action.payload.name]: action.payload.value
+        }
+      };
+
+    case 'RESET_FILTERS':
+      return {
+        ...state,
+        filters: initialMovieState.filters
       };
 
     default:

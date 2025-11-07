@@ -87,11 +87,17 @@ export const AuthProvider = ({ children }) => {
     dispatch({ type: 'CLEAR_ERROR' });
   }, []);
 
+  // Hàm đóng welcome modal
+  const closeWelcomeModal = useCallback(() => {
+    dispatch({ type: 'CLOSE_WELCOME_MODAL' });
+  }, []);
+
   // Giá trị của Dispatch Context
   const dispatchValue = {
     login,
     logout,
     clearError,
+    closeWelcomeModal,
   };
 
   return (

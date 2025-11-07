@@ -13,6 +13,8 @@ import MovieManager from './pages/MovieManager';
 // Components
 import Header from './component/Header';
 import PrivateRoute from './component/PrivateRoute';
+import WelcomeModal from './component/WelcomeModal';
+import MovieDetails from './pages/MovieDetails';
 
 function App() {
   return (
@@ -20,6 +22,7 @@ function App() {
       <Router>
         <div className="App">
           <Header />
+          <WelcomeModal />
           
           <Routes>
             {/* Route công khai: Trang đăng nhập */}
@@ -31,6 +34,16 @@ function App() {
               element={
                 <PrivateRoute>
                   <MovieManager />
+                </PrivateRoute>
+              } 
+            />
+            
+            {/* Route được bảo vệ: Trang chi tiết phim */}
+            <Route 
+              path="/movies/:id" 
+              element={
+                <PrivateRoute>
+                  <MovieDetails />
                 </PrivateRoute>
               } 
             />

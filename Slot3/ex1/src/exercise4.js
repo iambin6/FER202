@@ -6,3 +6,5 @@ const [first, , third = 0, ...restAges] = ages;
 console.log(first);
 console.log(third);
 console.log(restAges);  // [16, 5, 54, 21, 44, 61, 13, 15, 45, 25, 64, 32]
+const sumRest = (...num) => num.filter(n => n %2 === 0).reduce((acc, n) => acc + n, 0);
+console.log(sumRest(...restAges));

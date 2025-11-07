@@ -3,6 +3,7 @@ import React from 'react';
 import { Container } from 'react-bootstrap';
 import { MovieProvider } from '../contexts/MovieContext';
 import MovieForm from '../component/MovieForm';
+import MovieFilter from '../component/MovieFilter';
 import MovieTable from '../component/MovieTable';
 
 // Component con hiển thị nội dung, được bọc bởi Provider
@@ -13,8 +14,10 @@ const MovieManagerContent = () => {
             
             <MovieForm /> 
             
-            <h2 className="mt-4">Danh sách Phim</h2>
+            <MovieFilter />
             
+            <h2 className="mt-4">Danh sách Phim</h2>
+
             <MovieTable /> 
             
         </Container>

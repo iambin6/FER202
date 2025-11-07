@@ -6,6 +6,7 @@ export const initialAuthState = {
   user: null, // { id, username, fullname, role }
   loading: false,
   error: null,
+  showWelcomeModal: false,
 };
 
 // Reducer
@@ -25,6 +26,7 @@ export const authReducer = (state, action) => {
         isAuthenticated: true,
         user: action.payload, // { id, username, fullname, role }
         error: null,
+        showWelcomeModal: true,
       };
 
     case 'LOGIN_FAILURE':
@@ -45,6 +47,12 @@ export const authReducer = (state, action) => {
       return {
         ...state,
         error: null,
+      };
+
+    case 'CLOSE_WELCOME_MODAL':
+      return {
+        ...state,
+        showWelcomeModal: false,
       };
 
     default:
